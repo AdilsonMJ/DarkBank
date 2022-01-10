@@ -14,10 +14,9 @@ public class Account extends Client{
     private Statement stm = null;
 
     private String typeOfAccount, accountNumber;
-    private double balance;
+    private double balance = 0;
 
     public Account() {
-
         try {
             connetion  = BDBank.getConnection();
             stm = connetion.createStatement();
@@ -29,10 +28,17 @@ public class Account extends Client{
     }
 
     public void deposit(double cash){
-       this.balance += cash;
-       boolean status = ChangingBalance.changing(connetion, this);
+       Balance.changingBalance((cash + this.getBalance()), this.getAccountNumber());
     }
 
+
+    public void withdrawing(double cash){
+        if (this.getBalance() >= cash){
+            Balance.changingBalance((this.getBalance() - cash), this.getAccountNumber());
+        } else{
+            System.out.println("insufficient balance");
+        }
+    }
 
     public StringBuilder getAccount() {
         StringBuilder accountNumber = new StringBuilder();
@@ -45,26 +51,50 @@ public class Account extends Client{
     }
 
     public double getBalance() {
-
-
-        try{
-
-            stm.execute("SELECT BALANCE from client");
-            ResultSet rst = stm.getResultSet();
-            double balance;
-
-            while(rst.next()){
-                balance = rst.getDouble("BALANCE");
-            }
-
-        } catch (SQLException e){
-            throw new DbException(e.getMessage());
-        }
-        return balance;
+        return Balance.balance(this);
     }
 
     public void closerConnection(){
         BDBank.closerConnection(this.stm, this.connetion);
+    }
+
+    public void CreatingAccount(String typeOfAccount, String accountNumber, String name, int age){
+
+        super.setName(name);
+        super.setAge(age);
+        this.typeOfAccount = typeOfAccount;
+        this.accountNumber = accountNumber;
+
+        boolean status = InsertDates.inserting(this.connetion, this);
+    }
+
+
+    public void login(String accountNumber){
+        this.accountNumber = accountNumber;
+        try {
+            ResultSet rst = stm.executeQuery("select *  FROM CLIENT WHERE ACCOUNTNUMBER = " + accountNumber);
+
+
+            while (rst.next()){
+                System.out.println(rst.getString("NAME"));
+                this.setAge(rst.getInt("AGE"));
+                this.setBalance(rst.getDouble("BALANCE"));
+                this.setTypeOfAccount(rst.getString("TYPEOFACCOUNT"));
+            }
+
+        }catch (SQLException e){
+            throw new DbException(e.getMessage());
+        }
+
+    }
+
+
+    private void setTypeOfAccount(String typeOfAccount) {
+        this.typeOfAccount = typeOfAccount;
+    }
+
+    private void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public String getTypeOfAccount() {
@@ -73,15 +103,5 @@ public class Account extends Client{
 
     public String getAccountNumber() {
         return accountNumber;
-    }
-
-    public void insertDates(String typeOfAccount, String accountNumber, String name, int age){
-
-        super.setName(name);
-        super.setAge(age);
-        this.typeOfAccount = typeOfAccount;
-        this.accountNumber = accountNumber;
-
-        boolean status = InsertDates.inserting(this.connetion, this);
     }
 }
