@@ -2,10 +2,7 @@ package BD;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Properties;
 
 public abstract class BDBank {
@@ -39,15 +36,40 @@ public abstract class BDBank {
         }
     }
 
-    public static void closerConnection(Statement stm, Connection connection){
+    public static void closer(Statement stm){
         try {
             stm.close();
-            connection.close();
-            System.out.println("Connected closer");
         } catch (SQLException e){
             throw new DbException(e.getMessage());
         }
 
+    }
+
+
+    public static void closer(Connection connection){
+        try {
+            connection.close();
+        } catch (SQLException e){
+            throw new DbException(e.getMessage());
+        }
+    }
+
+    public static void closer(ResultSet rst){
+        try {
+            rst.close();
+        } catch (SQLException e){
+            throw new DbException(e.getMessage());
+        }
+    }
+
+    public static void closer(ResultSet rst, Connection connection, Statement stm){
+        try {
+            rst.close();
+            stm.close();
+            connection.close();
+        } catch (SQLException e){
+            throw new DbException(e.getMessage());
+        }
     }
 
 }

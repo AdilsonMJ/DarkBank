@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="com.itcodebox.notebooks.projectservice.ProjectUIState">
     <option name="selectedNotebookId" value="2" />
-    <option name="selectedChapterId" value="5" />
-    <option name="selectedNoteId" value="6" />
+    <option name="selectedChapterId" value="4" />
+    <option name="selectedNoteId" value="5" />
   </component>
 </project>

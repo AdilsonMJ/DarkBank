@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 public abstract class InsertDates {
 
-    public static boolean inserting(Connection connection,  Account account) {
+    public static boolean inserting(Connection connection,  String typeOfAccount, String accountNumber, String name, int age) {
 
         boolean status;
         try {
@@ -17,11 +17,11 @@ public abstract class InsertDates {
                             + "values (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS
             );
 
-            preparedStatement.setString(1, account.getName());
-            preparedStatement.setInt(2, account.getAge());
-            preparedStatement.setDouble(3, account.getBalance());
-            preparedStatement.setString(4, account.getTypeOfAccount());
-            preparedStatement.setString(5, account.getAccountNumber());
+            preparedStatement.setString(1, name);
+            preparedStatement.setInt(2, age);
+            preparedStatement.setDouble(3, 0.0);
+            preparedStatement.setString(4, typeOfAccount);
+            preparedStatement.setString(5, accountNumber);
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
